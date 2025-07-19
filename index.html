@@ -7,19 +7,42 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>KME Commerce</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="report.html">Report Adverse Event</a>
-    </nav>
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">KME Commerce</a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="report.html">Report Event</a></li>
+        </ul>
+      </nav>
+      <button class="nav-toggle" aria-label="toggle navigation">
+        ☰
+      </button>
+    </div>
   </header>
-  <main>
-    <h2>Welcome to KME Commerce</h2>
-    <p>Your trusted source for health and wellness products.</p>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Welcome to KME Commerce</h2>
+      <p>Your trusted source for health and wellness products.</p>
+      <a href="report.html" class="btn">Report an Adverse Event</a>
+    </section>
   </main>
-  <footer>
-    <p>&copy; 2025 KME Commerce</p>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 KME Commerce. All rights reserved.</p>
+    </div>
   </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('.site-nav ul');
+    toggle.addEventListener('click', () => {
+      nav.classList.toggle('nav-open');
+    });
+  </script>
 </body>
 </html>

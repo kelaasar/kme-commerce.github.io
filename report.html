@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Adverse Event - KME Commerce</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>KME Commerce</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="report.html">Report Adverse Event</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Report an Adverse Event</h2>
+    <p>If you've experienced a serious adverse event with one of our products, please use the form below to report it. We take your health seriously and report required events to the FDA in accordance with applicable law.</p>
+    
+    <form method="post" action="https://example.com/report-handler">
+      <label for="name">Your Name:</label><br />
+      <input type="text" id="name" name="name" required /><br /><br />
+
+      <label for="email">Your Email:</label><br />
+      <input type="email" id="email" name="email" required /><br /><br />
+
+      <label for="product">Product Involved:</label><br />
+      <input type="text" id="product" name="product" required /><br /><br />
+
+      <label for="description">Description of Adverse Event:</label><br />
+      <textarea id="description" name="description" rows="6" required></textarea><br /><br />
+
+      <button type="submit">Submit Report</button>
+    </form>
+  </main>
+  <footer>
+    <p>&copy; 2025 KME Commerce</p>
+  </footer>
+</body>
+</html>

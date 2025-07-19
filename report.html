@@ -13,7 +13,7 @@
       <nav class="site-nav">
         <ul>
           <li><a href="index.html">Home</a></li>
-          <li><a href="report.html" class="active">Report Event</a></li>
+          <li><a href="report.html" class="active report-link">Report Event</a></li>
         </ul>
       </nav>
       <button class="nav-toggle" aria-label="toggle navigation">
@@ -26,7 +26,7 @@
     <section class="report">
       <h2>Report an Adverse Event</h2>
       <p>Please fill out the form below. We take your health seriously and will report required events to the FDA.</p>
-      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="report-form">
+      <form action="https://formspree.io/f/mpwlwnvv" method="POST" class="report-form">
         <label for="name">Your Name</label>
         <input type="text" id="name" name="name" required />
 
@@ -36,7 +36,11 @@
         <label for="message">Description of Event</label>
         <textarea id="message" name="message" rows="6" required></textarea>
 
+        <!-- Set the email subject line -->
         <input type="hidden" name="_subject" value="Adverse Event Report" />
+        <!-- Show an inline thank‑you message on success -->
+        <input type="hidden" name="_after" value="Thank you! Your report has been submitted." />
+
         <button type="submit" class="btn">Submit Report</button>
       </form>
     </section>
@@ -52,9 +56,7 @@
     // Mobile nav toggle
     const toggle = document.querySelector('.nav-toggle');
     const nav = document.querySelector('.site-nav ul');
-    toggle.addEventListener('click', () => {
-      nav.classList.toggle('nav-open');
-    });
+    toggle.addEventListener('click', () => nav.classList.toggle('nav-open'));
   </script>
 </body>
 </html>

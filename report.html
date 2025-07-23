@@ -16,31 +16,44 @@
           <li><a href="report.html" class="active report-link">Report Event</a></li>
         </ul>
       </nav>
-      <button class="nav-toggle" aria-label="toggle navigation">
-        ☰
-      </button>
+      <button class="nav-toggle" aria-label="toggle navigation">☰</button>
     </div>
   </header>
 
   <main class="container">
     <section class="report">
       <h2>Report an Adverse Event</h2>
-      <p>Please fill out the form below. We take your health seriously and will report required events to the FDA.</p>
-      <form action="https://formspree.io/f/mpwlwnvv" method="POST" class="report-form">
+
+      <div class="download-fda">
+        <a href="static/FDA_form.pdf" download class="btn">
+          Download FDA Adverse‑Event Form (PDF)
+        </a>
+      </div>
+
+      <p>Please enter your name, email, and attach any photos or videos of the event. We take your health seriously and will report required events to the FDA.</p>
+
+      <form
+        action="https://script.google.com/a/macros/kme-commerce.com/s/AKfycbxA67xoTHvAJrYZvGWPLE7ckYt1LBYKK7wcXeO_17GrcK7fJSr7ay0ecuY_dKXUNmj7/exec"
+        method="POST"
+        enctype="multipart/form-data"
+        class="report-form"
+      >
         <label for="name">Your Name</label>
         <input type="text" id="name" name="name" required />
 
         <label for="email">Your Email</label>
         <input type="email" id="email" name="_replyto" required />
 
-        <label for="message">Description of Event</label>
-        <textarea id="message" name="message" rows="6" required></textarea>
+        <label for="attachments">Attachments (images/videos)</label>
+        <input
+          type="file"
+          id="attachments"
+          name="attachments"
+          accept="image/*,video/*"
+          multiple
+        />
 
-        <!-- Set the email subject line -->
         <input type="hidden" name="_subject" value="Adverse Event Report" />
-        <!-- Show an inline thank‑you message on success -->
-        <input type="hidden" name="_after" value="Thank you! Your report has been submitted." />
-
         <button type="submit" class="btn">Submit Report</button>
       </form>
     </section>

@@ -21,12 +21,17 @@
 
       <p>Please enter your name, email, and attach any images or videos of the event.</p>
 
-      <form id="report-form" class="report-form">
+      <form
+        action="https://script.google.com/macros/s/AKfycbwENJQ0mPaDkBIrzAxpEW7LDY8PpZeP4Lj5JPErQDSDbdMtqlb-CDHU4Wo9OJEqlZK2/exec"
+        method="POST"
+        enctype="multipart/form-data"
+        class="report-form"
+      >
         <label for="name">Your Name</label>
         <input type="text" id="name" name="name" required/>
 
         <label for="email">Your Email</label>
-        <input type="email" id="email" name="email" required/>
+        <input type="email" id="email" name="_replyto" required/>
 
         <label for="attachments">Attachments (images/videos)</label>
         <input
@@ -38,52 +43,7 @@
 
         <button type="submit" class="btn">Submit Report</button>
       </form>
-
-      <p id="status" style="margin-top:1em;"></p>
     </section>
   </main>
-
-  <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwENJQ0mPaDkBIrzAxpEW7LDY8PpZeP4Lj5JPErQDSDbdMtqlb-CDHU4Wo9OJEqlZK2/exec';
-
-    document.getElementById('report-form').addEventListener('submit', async e => {
-      e.preventDefault();
-      const statusEl = document.getElementById('status');
-      statusEl.textContent = 'Preparing upload…';
-
-      const form = e.target;
-      const name = form.name.value.trim();
-      const email= form.email.value.trim();
-      const files= Array.from(form.attachments.files);
-
-      // Read all files as Base64
-      const attachments = await Promise.all(files.map(file => new Promise((res, rej) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64 = reader.result.split(',')[1];
-          res({ filename: file.name, type: file.type, data: base64 });
-        };
-        reader.onerror = rej;
-        reader.readAsDataURL(file);
-      })));
-
-      statusEl.textContent = 'Uploading…';
-
-      // Send JSON payload
-      const payload = { name, email, attachments };
-      try {
-        const resp = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        const text = await resp.text();
-        statusEl.textContent = text;
-        form.reset();
-      } catch (err) {
-        statusEl.textContent = 'Upload error: ' + err;
-      }
-    });
-  </script>
 </body>
 </html>

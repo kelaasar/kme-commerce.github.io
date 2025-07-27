@@ -1,44 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Report Adverse Event - KME Commerce</title>
-  <link rel="stylesheet" href="styles.css"/>
-</head>
+<html>
 <body>
-  <main class="container">
-    <section class="report">
-      <h2>Report an Adverse Event</h2>
-      <div class="download-fda">
-        <a href="static/FDA_form.pdf" download class="btn">
-          Download FDA Adverse‑Event Form (PDF)
-        </a>
-      </div>
-      <p>Please enter your name, email, and attach any images or videos of the event.</p>
-      <form
-        action="https://script.google.com/macros/s/AKfycbyu7FIeepvoUAaU7JqwZN9Y5sWiio8jqY4utkTnsVC36giy9KzAQ1S1CrEQZgjJnwo/exec"
-        method="POST"
-        enctype="multipart/form-data"
-        class="report-form"
-      >
-        <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" required/>
-
-        <label for="email">Your Email</label>
-        <input type="email" id="email" name="_replyto" required/>
-
-        <label for="attachments">Attachments (images/videos)</label>
-        <input
-          type="file"
-          id="attachments"
-          name="attachments"
-          accept="image/*,video/*"
-          multiple/>
-
-        <button type="submit" class="btn">Submit Report</button>
-      </form>
-    </section>
-  </main>
+  <form
+    action="https://script.google.com/macros/s/AKfycbwd_05DEnjkJU_N2u3nhRIMUnweZwXqRNPQMNY_9oycch0EMHtHnCzYqBEXAhwlxvg/exec"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <input type="text" name="name" placeholder="Name" required><br>
+    <input type="file" name="attachments" multiple><br>
+    <button type="submit">Send</button>
+  </form>
 </body>
 </html>

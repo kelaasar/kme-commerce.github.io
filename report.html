@@ -45,12 +45,12 @@
     <div class="card-group">
       <aside class="side-download">
         <div class="download-card">
-          <h3>Download Form</h3>
+          <h3>Download Report</h3>
           <a href="static/FDA_form.pdf" download class="download-btn" target="_blank">
             <span>Download</span>
           </a>
           <p class="download-instructions">
-            Fill This Report Out and Submit it below
+            Fill this report out and submit it below.
           </p>
         </div>
       </aside>
@@ -59,7 +59,6 @@
         <p>
           Fill out your information and attach any files (optional). <br>
           You can drag & drop files or click to select multiple.<br>
-          <span style="font-size:0.95em;color:#888;">Each submission creates a new folder for privacy.</span>
         </p>
         <form id="uploadForm" class="report-form" autocomplete="off">
           <label for="name">Your Name</label>
@@ -140,51 +139,62 @@
 
     const form = document.getElementById("uploadForm");
     const msg = document.getElementById("msg");
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-      msg.textContent = "";
-      msg.className = "";
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    msg.textContent = "";
+    msg.className = "";
 
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
 
-      if (!name || !email) {
-        msg.textContent = "Please fill all fields.";
-        msg.className = "error";
-        return;
-      }
-      const baseFolder = `${name.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_')}-${email.replace(/[^\w@.-]/g, '')}`;
-      const token = randomToken(12);
-      const uniqueFolder = `${baseFolder}-${token}`;
-      let uploadErrors = [];
-      if (selectedFiles.length > 0) {
-        for (let i = 0; i < selectedFiles.length; i++) {
-          const file = selectedFiles[i];
-          const filePath = `${uniqueFolder}/${Date.now()}_${file.name}`;
-          let { error: uploadError } = await client.storage
-            .from(BUCKET)
-            .upload(filePath, file);
-          if (uploadError) {
-            uploadErrors.push(file.name);
-          }
+    if (!name || !email) {
+      msg.textContent = "Please fill all fields.";
+      msg.className = "error";
+      return;
+    }
+
+    // Build date in MM-DD-YYYY format (with leading zeros)
+    const today = new Date();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    const dateString = `${mm}-${dd}-${yyyy}`;
+
+    // Folder: [Date]-[name]-[email]-[token]
+    const namePart = name.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_');
+    const emailPart = email.replace(/[^\w@.-]/g, '');
+    const token = randomToken(12);
+    const uniqueFolder = `${dateString}-${namePart}-${emailPart}-${token}`;
+
+    let uploadErrors = [];
+    if (selectedFiles.length > 0) {
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const filePath = `${uniqueFolder}/${Date.now()}_${file.name}`;
+        let { error: uploadError } = await client.storage
+          .from(BUCKET)
+          .upload(filePath, file);
+        if (uploadError) {
+          uploadErrors.push(file.name);
         }
       }
-      const infoTxt = `Name: ${name}\nEmail: ${email}\nTime: ${new Date().toLocaleString()}\nFiles: ${selectedFiles.map(f => f.name).join(", ")}`;
-      await client.storage
-        .from(BUCKET)
-        .upload(`${uniqueFolder}/report.txt`, new Blob([infoTxt], {type:"text/plain"}));
+    }
 
-      if (uploadErrors.length === 0) {
-        msg.textContent = "Thank you! Your report has been submitted.";
-        msg.className = "success";
-      } else {
-        msg.textContent = "Some files failed to upload: " + uploadErrors.join(", ");
-        msg.className = "error";
-      }
-      form.reset();
-      selectedFiles = [];
-      renderFileList();
-    };
+    // No report.txt file creation or upload!
+
+    // --- Show message ---
+    if (uploadErrors.length === 0) {
+      msg.textContent = "Thank you! Your report has been submitted.";
+      msg.className = "success";
+    } else {
+      msg.textContent = "Some files failed to upload: " + uploadErrors.join(", ");
+      msg.className = "error";
+    }
+    form.reset();
+    selectedFiles = [];
+    renderFileList();
+  };
+
 
     // Nav toggle for mobile
     const toggle = document.querySelector('.nav-toggle');

@@ -1,59 +1,352 @@
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
-  background: #f0f8ff;
-  color: #222;
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f8ff;
+  color: #222;
 }
 
-main.container {
-  max-width: 520px;
-  margin: 2em auto;
+/* NAVIGATION */
+.site-header {
   background: #fff;
-  padding: 2em 2em 1.5em 2em;
-  border-radius: 12px;
-  box-shadow: 0 6px 24px #0001;
+  box-shadow: 0 2px 10px #1a8cff08;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-
-h2 {
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  position: relative;
+}
+.logo {
+  font-weight: 700;
+  font-size: 1.45em;
+  letter-spacing: 1px;
   color: #1a8cff;
-  margin-top: 0;
+  text-decoration: none;
+  padding: 0.3em 0.2em;
+  flex: 1;
+  text-align: left;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1.3em;
+  transition: right 0.3s;
+}
+.nav-links li a {
+  color: #1a8cff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1em;
+  padding: 0.4em 0.9em;
+  border-radius: 5px;
+  transition: background 0.18s, color 0.18s;
+}
+.nav-links li a.active,
+.nav-links li a:hover {
+  background: #e6f2ff;
+  color: #1568a8;
+}
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  margin-left: 1em;
+}
+.hamburger,
+.hamburger:before,
+.hamburger:after {
+  display: block;
+  background: #1a8cff;
+  height: 3px;
+  width: 28px;
+  border-radius: 2px;
+  position: relative;
+  transition: 0.4s;
+}
+.hamburger:before,
+.hamburger:after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+.hamburger:before { top: -8px; }
+.hamburger:after { top: 8px; }
+
+@media (max-width: 750px) {
+  .container { max-width: 100%; }
+  .navbar {
+    flex-wrap: wrap;
+    min-height: 48px;
+    padding: 0.7em 0.3em;
+  }
+  .nav-toggle {
+    display: block;
+  }
+  .nav-links {
+    flex-direction: column;
+    background: #fff;
+    position: absolute;
+    top: 56px;
+    right: -220px;
+    width: 180px;
+    gap: 0;
+    box-shadow: 0 4px 20px #1a8cff13;
+    border-radius: 0 0 10px 10px;
+    padding: 1em 0.3em;
+    opacity: 0;
+    pointer-events: none;
+    transition: right 0.35s cubic-bezier(0.4,0.8,0.2,1), opacity 0.2s;
+    z-index: 99;
+  }
+  .nav-links.nav-open {
+    right: 0;
+    opacity: 1;
+    pointer-events: all;
+  }
+  .nav-links li {
+    margin: 0.6em 0;
+  }
 }
 
+/* --- Main Centering & Flex --- */
+.main-center {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;    /* Small gap */
+  width: 100%;
+  margin: 0 auto;
+}
+
+.report,
+.side-download {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px #1a8cff12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+}
+
+/* --- Form Card --- */
+.report {
+  flex: 1 1 360px;
+  max-width: 410px;
+  min-width: 310px;
+  padding: 2em 1.4em 2em 1.4em;
+}
+
+/* --- Download Card --- */
+.side-download {
+  flex: 0 0 220px;
+  max-width: 220px;
+  min-width: 190px;
+  padding: 2em 1em 2em 1em;
+  margin-left: 2.2em;
+}
+
+.download-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.download-card h3 {
+  font-size: 1.13em;
+  margin-bottom: 0.9em;
+  color: #1a8cff;
+  font-weight: bold;
+}
+
+.download-btn {
+  display: inline-block;
+  margin-top: 0.2em;
+  background: #1a8cff;
+  color: #fff;
+  padding: 0.78em 1.42em;
+  border-radius: 7px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.07em;
+  transition: background 0.18s;
+  border: none;
+}
+.download-btn:hover {
+  background: #1568a8;
+}
+
+/* --- Responsive: stack on small screens --- */
+@media (max-width: 900px) {
+  .main-flex {
+    flex-direction: column;
+    gap: 1.2em;
+    align-items: stretch;
+  }
+  .report, .side-download {
+    max-width: 100%;
+    width: 100%;
+    min-width: 0;
+    margin: 0 auto;
+  }
+  .download-card {
+    margin-top: 0;
+    min-height: 0;
+  }
+}
+
+/* Card style, tighter and max-width */
+.hero-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 220px;
+  background: #fff;
+  padding: 1.5em 1em 1.5em 1em;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px #1a8cff12;
+  margin: 0 auto;
+}
+
+@media (min-width: 700px) {
+  .hero-card {
+    padding: 2em 2.2em 2em 2.2em;
+    max-width: 460px;
+  }
+}
+
+.hero-card h2,
+.report h2 {
+  color: #3596fa;
+  margin-top: 0;
+  font-size: 1.65em;
+  font-weight: 700;
+  text-align: center;
+}
+.hero-card p,
+.report p {
+  font-size: 1.06em;
+  margin-bottom: 1.1em;
+  text-align: center;
+}
+
+/* --- Spacing Fixes for Attachments --- */
 .report label {
   font-weight: bold;
   margin-top: 1em;
+  margin-bottom: 0.45em;
   display: block;
+  font-size: 1.05em;
+}
+.report label[for="dropzone"] {
+  margin-bottom: 0.7em;
+}
+#dropzone {
+  margin-top: 0.15em;
+  margin-bottom: 0.3em;
 }
 
+/* --- Report form styling --- */
+.report-form {
+  width: 100%;
+  max-width: 330px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
 .report input[type="text"],
 .report input[type="email"],
-.report input[type="file"],
-.report textarea {
+.report input[type="file"] {
   display: block;
   width: 100%;
-  padding: 0.7em;
+  padding: 0.65em;
   border: 1px solid #b4d2f7;
   border-radius: 5px;
-  margin: 0.4em 0 1em 0;
+  margin: 0.3em 0 0.8em 0;
+  font-size: 0.97em;
+}
+#msg {
+  margin-top: 1em;
+  min-height: 1.2em;
+  text-align: center;
   font-size: 1em;
 }
+.success { color: green; }
+.error { color: red; }
 
+/* --- Button --- */
 .btn {
-  background: #1a8cff;
+  background: #3596fa;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 7px;
   font-weight: bold;
-  padding: 0.8em 1.8em;
-  font-size: 1.1em;
-  margin-top: 0.5em;
+  padding: 0.75em 1.4em;
+  font-size: 1.05em;
+  margin-top: 1.1em;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.18s;
   text-decoration: none;
-  display: inline-block;
+  display: block;
+  width: auto;
+  min-width: 200px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 .btn:hover {
   background: #1568a8;
+}
+
+/* --- Footer --- */
+.site-footer {
+  text-align: center;
+  padding: 2em 0 1em 0;
+  background: transparent;
+  font-size: 1em;
+  color: #444;
+  margin-top: 3em;
+}
+.site-footer .container {
+  max-width: 100%;
+}
+
+/* --- Mobile tweaks --- */
+@media (max-width: 600px) {
+  .hero-card,
+  .report {
+    padding: 1em;
+    min-height: 160px;
+    box-sizing: border-box;
+    max-width: 99vw;
+  }
+  .report-form {
+    max-width: 100%;
+    padding: 0;
+  }
 }

@@ -2,30 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KME Commerce</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <header class="site-header">
-    <div class="container nav-container">
+    <nav class="navbar container">
       <a href="index.html" class="logo">KME Commerce</a>
-      <nav class="site-nav">
-        <ul>
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="report.html" class="report-link">Report Event</a></li>
-        </ul>
-      </nav>
-      <button class="nav-toggle" aria-label="toggle navigation">☰</button>
-    </div>
+      <button class="nav-toggle" aria-label="toggle navigation">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="report.html">Report Event</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <main class="container">
-    <section class="hero">
+  <main class="main-center container">
+    <div class="hero-card">
       <h2>Welcome to KME Commerce</h2>
       <p>Your trusted source for health and wellness products.</p>
       <a href="report.html" class="btn">Report an Adverse Event</a>
-    </section>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -37,8 +37,8 @@
   <script>
     // Mobile nav toggle
     const toggle = document.querySelector('.nav-toggle');
-    const nav = document.querySelector('.site-nav ul');
-    toggle.addEventListener('click', () => nav.classList.toggle('nav-open'));
+    const navLinks = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => navLinks.classList.toggle('nav-open'));
   </script>
 </body>
 </html>

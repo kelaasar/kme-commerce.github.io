@@ -40,41 +40,44 @@
       </ul>
     </nav>
   </header>
-  <main class="main-center container main-flex">
-    <section class="report">
-      <h2>Report an Adverse Event</h2>
-      <p>
-        Fill out your information and attach any files (optional). <br>
-        You can drag & drop files or click to select multiple.<br>
-        <span style="font-size:0.95em;color:#888;">Each submission creates a new folder for privacy.</span>
-      </p>
-      <form id="uploadForm" class="report-form" autocomplete="off">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" required autocomplete="off"/>
-
-        <label for="email">Your Email</label>
-        <input type="email" id="email" required autocomplete="off"/>
-
-        <label for="dropzone">Attachments (optional)</label>
-        <div id="dropzone" class="dropzone">Drag & drop files here, or click to select</div>
-        <input type="file" id="attachments" multiple style="display:none;"/>
-        <ul id="fileList" class="file-list"></ul>
-
-        <button type="submit" class="btn">Submit Report</button>
-        <div id="msg"></div>
-      </form>
-    </section>
-    <aside class="side-download">
-      <div class="download-card">
-        <h3>Download Form</h3>
-        <a href="static/FDA_form.pdf" download class="download-btn" target="_blank">
-          <span>Download</span>
-        </a>
-        <p style="font-size:0.97em;color:#555;margin-top:1.1em;">
-          Fill This Report Out and Submit it below
+  <main class="main-center container main-flex-vertical">
+    <!-- Download Form card on top -->
+    <div class="card-group">
+      <aside class="side-download">
+        <div class="download-card">
+          <h3>Download Form</h3>
+          <a href="static/FDA_form.pdf" download class="download-btn" target="_blank">
+            <span>Download</span>
+          </a>
+          <p class="download-instructions">
+            Fill This Report Out and Submit it below
+          </p>
+        </div>
+      </aside>
+      <section class="report">
+        <h2>Report an Adverse Event</h2>
+        <p>
+          Fill out your information and attach any files (optional). <br>
+          You can drag & drop files or click to select multiple.<br>
+          <span style="font-size:0.95em;color:#888;">Each submission creates a new folder for privacy.</span>
         </p>
-      </div>
-    </aside>
+        <form id="uploadForm" class="report-form" autocomplete="off">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" required autocomplete="off"/>
+
+          <label for="email">Your Email</label>
+          <input type="email" id="email" required autocomplete="off"/>
+
+          <label for="dropzone">Attachments (optional)</label>
+          <div id="dropzone" class="dropzone">Drag & drop files here, or click to select</div>
+          <input type="file" id="attachments" multiple style="display:none;"/>
+          <ul id="fileList" class="file-list"></ul>
+
+          <button type="submit" class="btn">Submit Report</button>
+          <div id="msg"></div>
+        </form>
+      </section>
+    </div>
   </main>
   <footer class="site-footer">
     <div class="container">
@@ -89,7 +92,6 @@
     const BUCKET = 'report-adverse-events';
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // --- Token generator ---
     function randomToken(length = 12) {
       const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
       let token = "";
@@ -99,16 +101,11 @@
       return token;
     }
 
-    // --- File drag and drop / picker logic ---
     let selectedFiles = [];
     const dropzone = document.getElementById("dropzone");
     const attachments = document.getElementById("attachments");
     const fileList = document.getElementById("fileList");
-
-    // Open file dialog on dropzone click
     dropzone.onclick = () => attachments.click();
-
-    // Drag events
     dropzone.ondragover = e => { e.preventDefault(); dropzone.classList.add("dragover"); };
     dropzone.ondragleave = () => dropzone.classList.remove("dragover");
     dropzone.ondrop = e => {
@@ -116,12 +113,10 @@
       dropzone.classList.remove("dragover");
       addFiles(e.dataTransfer.files);
     };
-    // On file input change
     attachments.onchange = () => addFiles(attachments.files);
 
     function addFiles(fileListObj) {
       for (let file of fileListObj) {
-        // Prevent duplicate file names in current list
         if (!selectedFiles.some(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified)) {
           selectedFiles.push(file);
         }
@@ -138,13 +133,11 @@
         fileList.appendChild(li);
       });
     }
-    // Remove file by index
     window.removeFile = idx => {
       selectedFiles.splice(idx, 1);
       renderFileList();
     };
 
-    // --- Form Submission ---
     const form = document.getElementById("uploadForm");
     const msg = document.getElementById("msg");
     form.onsubmit = async (e) => {
@@ -160,12 +153,9 @@
         msg.className = "error";
         return;
       }
-      // --- Generate unique folder with random token ---
       const baseFolder = `${name.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_')}-${email.replace(/[^\w@.-]/g, '')}`;
       const token = randomToken(12);
       const uniqueFolder = `${baseFolder}-${token}`;
-
-      // --- Upload all files ---
       let uploadErrors = [];
       if (selectedFiles.length > 0) {
         for (let i = 0; i < selectedFiles.length; i++) {
@@ -179,13 +169,11 @@
           }
         }
       }
-      // --- Save a submission info file (txt) for tracking ---
       const infoTxt = `Name: ${name}\nEmail: ${email}\nTime: ${new Date().toLocaleString()}\nFiles: ${selectedFiles.map(f => f.name).join(", ")}`;
       await client.storage
         .from(BUCKET)
         .upload(`${uniqueFolder}/report.txt`, new Blob([infoTxt], {type:"text/plain"}));
 
-      // --- Show message ---
       if (uploadErrors.length === 0) {
         msg.textContent = "Thank you! Your report has been submitted.";
         msg.className = "success";

@@ -180,8 +180,6 @@
       }
     }
 
-    // No report.txt file creation or upload!
-
     // --- Show message ---
     if (uploadErrors.length === 0) {
       msg.textContent = "Thank you! Your report has been submitted.";
@@ -194,7 +192,6 @@
     selectedFiles = [];
     renderFileList();
   };
-
 
     // Nav toggle for mobile
     const toggle = document.querySelector('.nav-toggle');

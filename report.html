@@ -140,58 +140,63 @@
     const form = document.getElementById("uploadForm");
     const msg = document.getElementById("msg");
   form.onsubmit = async (e) => {
-    e.preventDefault();
-    msg.textContent = "";
-    msg.className = "";
+  e.preventDefault();
+  msg.textContent = "";
+  msg.className = "";
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
 
-    if (!name || !email) {
-      msg.textContent = "Please fill all fields.";
-      msg.className = "error";
-      return;
-    }
+  if (!name || !email) {
+    msg.textContent = "Please fill all fields.";
+    msg.className = "error";
+    return;
+  }
 
-    // Build date in MM-DD-YYYY format (with leading zeros)
-    const today = new Date();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    const dateString = `${mm}-${dd}-${yyyy}`;
+  // Build date and time in MM-DD-YYYY-HH-MM-SS format (all zero-padded)
+  const now = new Date();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const yyyy = now.getFullYear();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const dateString = `${mm}-${dd}-${yyyy}`;
+  const timeString = `${hours}:${minutes}:${seconds}`;
 
-    // Folder: [Date]-[name]-[email]-[token]
-    const namePart = name.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_');
-    const emailPart = email.replace(/[^\w@.-]/g, '');
-    const token = randomToken(12);
-    const uniqueFolder = `${dateString}-${namePart}-${emailPart}-${token}`;
+  // Folder: [MM-DD-YYYY]-[HH-MM-SS]-[name]-[email]-[token]
+  const namePart = name.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_');
+  const emailPart = email.replace(/[^\w@.-]/g, '');
+  const token = randomToken(12);
+  const uniqueFolder = `${dateString}-${timeString}-${namePart}-${emailPart}-${token}`;
 
-    let uploadErrors = [];
-    if (selectedFiles.length > 0) {
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        const filePath = `${uniqueFolder}/${Date.now()}_${file.name}`;
-        let { error: uploadError } = await client.storage
-          .from(BUCKET)
-          .upload(filePath, file);
-        if (uploadError) {
-          uploadErrors.push(file.name);
-        }
+  let uploadErrors = [];
+  if (selectedFiles.length > 0) {
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      const filePath = `${uniqueFolder}/${Date.now()}_${file.name}`;
+      let { error: uploadError } = await client.storage
+        .from(BUCKET)
+        .upload(filePath, file);
+      if (uploadError) {
+        uploadErrors.push(file.name);
       }
     }
+  }
 
-    // --- Show message ---
-    if (uploadErrors.length === 0) {
-      msg.textContent = "Thank you! Your report has been submitted.";
-      msg.className = "success";
-    } else {
-      msg.textContent = "Some files failed to upload: " + uploadErrors.join(", ");
-      msg.className = "error";
-    }
-    form.reset();
-    selectedFiles = [];
-    renderFileList();
-  };
+  // --- Show message ---
+  if (uploadErrors.length === 0) {
+    msg.textContent = "Thank you! Your report has been submitted.";
+    msg.className = "success";
+  } else {
+    msg.textContent = "Some files failed to upload: " + uploadErrors.join(", ");
+    msg.className = "error";
+  }
+  form.reset();
+  selectedFiles = [];
+  renderFileList();
+};
+
 
     // Nav toggle for mobile
     const toggle = document.querySelector('.nav-toggle');
